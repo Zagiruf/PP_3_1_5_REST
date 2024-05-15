@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
@@ -14,10 +16,13 @@ import java.util.List;
 @RequestMapping(value = "/")
 public class UserController {
     private final UserService userService;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public UserController(UserService user) {
+    public UserController(UserService user, RoleRepository roleRepository) {
+
         this.userService = user;
+        this.roleRepository = roleRepository;
     }
 
     @GetMapping("/admin")
@@ -47,8 +52,10 @@ public class UserController {
     @GetMapping("/admin/id/edit")
     public String edit(@RequestParam("id") Long id, Model model) {
         model.addAttribute("user", userService.show(id));
+        model.addAttribute("allRoles",roleRepository.findAll());
         return "edit";
     }
+
 
     @PatchMapping("/admin/id")
     public String update(@ModelAttribute("user") User user) {

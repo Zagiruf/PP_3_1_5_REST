@@ -1,11 +1,17 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -17,10 +23,9 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private int age;
-    @Transient
-    private String passwordConfirm;
 
     @ManyToMany(fetch = FetchType.LAZY)
+
     private List<Role> roles;
 
     public User() {
@@ -89,14 +94,6 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
-
     public void listRoles(List<Role> roles) {
         this.roles = roles;
     }
@@ -107,5 +104,33 @@ public class User implements UserDetails {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return age == user.age && Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, age, roles);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", age=" + age +
+                ", roles=" + roles +
+                '}';
     }
 }
