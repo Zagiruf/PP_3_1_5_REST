@@ -8,8 +8,11 @@
 <body>
 <div>
     <th:block th:each="user : ${user1}">
-        <a th:text="${user.getUsername()}">us</a>
-        <a th:text="${user.getAge()}">us</a>
+        <a th:text="${user.getUsername()}">user</a>
+        <a th:text="${user.getAge()}">user</a>
+        <a th:text="${user.getPassword()}">user</a>
+        <a th:text="${user.getRoles()}">user</a>
+
         <br/>
     </th:block>
 </div>
