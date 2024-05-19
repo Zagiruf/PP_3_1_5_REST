@@ -11,7 +11,7 @@
         <a th:text="${user.getUsername()}">us</a>
         <a th:text="${user.getAge()}">us</a>
         <a th:text="${user.getRoles()}">us</a>
-        <a th:href="@{/admin/id/edit(id=${user.getId()})}">EditUser!</a>
+        <a th:href="@{/admin/{id}/edit(id=${user.getId()})}">EditUser!</a>
         <br/>
     </th:block>
 </div>
