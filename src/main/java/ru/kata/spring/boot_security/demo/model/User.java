@@ -32,11 +32,11 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String password, int age, List<Role> roles) {
+    public User(String username, String password, int age) {
         this.username = username;
         this.password = password;
         this.age = age;
-        this.roles = roles;
+
     }
 
 
