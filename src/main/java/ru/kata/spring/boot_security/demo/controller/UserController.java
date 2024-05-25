@@ -30,6 +30,8 @@ public class UserController {
     public String showAllUsers(Model model) {
         List<User> allUsers = userService.gelAllUsers();
         model.addAttribute("users", allUsers);
+
+
         return "admin";
     }
 
