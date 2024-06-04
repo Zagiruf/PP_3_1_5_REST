@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
@@ -27,51 +26,52 @@ public class UserController {
     }
 
     @GetMapping("/admin")
-    public String showAllUsers(Model model) {
+    public String showAllUsers(Model model, @ModelAttribute("user") User user, Principal principal) {
+        User userPrincipal = userService.findByUsername(principal.getName());
+        model.addAttribute("user1", userPrincipal);
         List<User> allUsers = userService.gelAllUsers();
         model.addAttribute("users", allUsers);
-
-
+        model.addAttribute("allRoles", roleService.findRoles());
         return "admin";
     }
 
-    @GetMapping("/admin/{id}")
-    public String show(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.show(id));
-        return "admin";
-    }
+//    @GetMapping("/admin/{id}")
+//    public String show(@PathVariable("id") Long id, Model model) {
+//        model.addAttribute("user", userService.show(id));
+//        return "admin";
+//    }
 
-    @GetMapping("admin/new")
-    public ModelAndView newUser(@ModelAttribute("user") User user) {
-        ModelAndView mav = new ModelAndView("new");
-        mav.addObject("allRoles", roleService.findRoles());
-        return mav;
-    }
+//    @GetMapping("admin/new")
+//    public ModelAndView newUser(@ModelAttribute("user") User user) {
+//        ModelAndView mav = new ModelAndView("new");
+//        mav.addObject("allRoles", roleService.findRoles());
+//        return mav;
+//    }
 
     @PostMapping("/admin")
     public String addNewUser(@ModelAttribute("user") User user, @RequestParam("roles") List<Long> roleId) {
         user.setRoles(roleService.findRolesById(roleId));
         userService.saveUser(user);
-        return "redirect:admin";
+        return "redirect:/admin";
     }
 
-    @GetMapping("/admin/{id}/edit")
-    public ModelAndView editUser(@PathVariable("id") Long id) {
-        ModelAndView mav = new ModelAndView("edit");
-        mav.addObject("user", userService.show(id));
-        mav.addObject("allRoles", roleService.findRoles());
-        return mav;
-    }
+//    @GetMapping("/admin/{id}/edit")
+//    public ModelAndView editUser(@PathVariable("id") Long id) {
+//        ModelAndView mav = new ModelAndView("edit");
+//        mav.addObject("user", userService.show(id));
+//        mav.addObject("allRoles", roleService.findRoles());
+//        return mav;
+//    }
 
 
-    @PatchMapping("/admin/{id}")
+    @PatchMapping("/admin")
     public String update(@ModelAttribute("user") User user, @RequestParam("roles") List<Long> roleIds) {
         user.setRoles(roleService.findRolesById(roleIds));
         userService.updateUser(user);
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/admin/id")
+    @DeleteMapping("/admin")
     public String delete(@RequestParam("id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin";

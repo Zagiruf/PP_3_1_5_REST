@@ -1,28 +1,28 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-<form th:method="POST" th:action="@{/admin}" th:object="${user}">
-    <label for="name">Enter name:</label>
-    <input type="text" th:field="*{username}" id="name"/>
-    <input type="text" th:field="*{age}" id="age"/>
-    <input type="text" th:field="*{password}" id="password"/>
-    <select multiple="multiple" id="allRoles" name="roles">
-        <option th:each="role : ${allRoles}"
-                th:value="${role.id}"
-                th:text="${role.name}">
-        </option>
-    </select>
-    <br/>
-    <input type="submit" value="Create!"/>
-</form>
+<!--<!DOCTYPE html>-->
+<!--<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title></title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<form th:method="POST" th:action="@{/admin}" th:object="${user}">-->
+<!--    <label for="name">Enter name:</label>-->
+<!--    <input type="text" th:field="*{username}" id="name"/>-->
+<!--    <input type="text" th:field="*{age}" id="age"/>-->
+<!--    <input type="text" th:field="*{password}" id="password"/>-->
+<!--    <select multiple="multiple" id="allRoles" name="roles">-->
+<!--        <option th:each="role : ${allRoles}"-->
+<!--                th:value="${role.id}"-->
+<!--                th:text="${role.name}">-->
+<!--        </option>-->
+<!--    </select>-->
+<!--    <br/>-->
+<!--    <input type="submit" value="Create!"/>-->
+<!--</form>-->
 
 
-<hr/>
-<a href="/logout">logout!</a>
-</body>
-</html>
+<!--<hr/>-->
+<!--<a href="/logout">logout!</a>-->
+<!--</body>-->
+<!--</html>-->

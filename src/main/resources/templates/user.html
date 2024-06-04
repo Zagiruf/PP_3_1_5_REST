@@ -3,20 +3,84 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
-</head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
 <body>
-<div>
-    <th:block th:each="user : ${user1}">
-        <a th:text="${user.getUsername()}">user</a>
-        <a th:text="${user.getAge()}">user</a>
-        <a th:text="${user.getPassword()}">user</a>
-        <a th:text="${user.getRoles()}">user</a>
 
-        <br/>
-    </th:block>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+
+<nav class="navbar navbar-dark bg-dark">
+    <span class="text-light">
+    <a href="#" class="navbar-admin">
+        <th:block th:each="user : ${user1}">
+            <a th:text="${user1.getUsername()}">user</a>
+            &nbsp;with roles:&nbsp;
+            <a th:text="${user1.getRoles()}">user</a>
+        </th:block>
+    </a>
+        </span>
+    <a class="text-muted nav-link active nav-link" href="/logout">Logout</a>
+</nav>
+<br/>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <!--        НАВИГАЦИЯ-->
+        <div class="col-2">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link" id="v-pills-user-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
+                   aria-controls="v-pills-profile" aria-selected="true">User</a>
+            </div>
+        </div>
+
+        <!--ВКЛАДКИ-->
+        <div class="col">
+            <div class="tab-content " id="v-pills-tabContent">
+                <div class="tab-pane fade " id="v-pills-profile" role="tabpanel"
+                     aria-labelledby="v-pills-profile-tab">
+                    <div class="tab-content" id="myTabContentAboutUser">
+                        <div class="tab-pane fade show active" id="homeAboutUser" role="tabpanel"
+                             aria-labelledby="home-tab">
+                            <h1>User infomation-page</h1>
+                            <table class="table table-striped">
+                                <tr>
+                                    <h5>About user</h5>
+                                </tr>
+                                <thead>
+                                <tr>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Age</th>
+                                    <th scope="col">Role</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <th:block th:each="user : ${user1}">
+                                    <tr>
+                                        <td><a th:text="${user1.getUsername()}">us</a></td>
+                                        <td><a th:text="${user1.getAge()}">us</a></td>
+                                        <td><a th:text="${user1.getRoles()}">us</a></td>
+                                </th:block>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
-<hr/>
-<a href="/logout">logout!</a>
 </html>
