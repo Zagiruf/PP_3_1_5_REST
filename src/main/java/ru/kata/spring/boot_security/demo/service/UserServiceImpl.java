@@ -6,17 +6,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
     private UserRepository userRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
         this.userRepository = userRepository;
     }
 
@@ -35,13 +40,36 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     @Transactional
     public void saveUser(User user) {
+        List<Role> roles = new ArrayList<>();
+        for (Role role : user.getRoles()) {
+            Role existingRole = roleRepository.findByName(role.getName());
+            if (existingRole != null) {
+                roles.add(existingRole);
+            } else {
+                roles.add(role);
+            }
+        }
+        user.setRoles(roles);
         userRepository.save(user);
     }
 
     @Override
     @Transactional
-    public void updateUser(User updatedUser) {
-        userRepository.save(updatedUser);
+    public void updateUser(Long id, User updatedUser) {
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        existingUser.setUsername(updatedUser.getUsername());
+        existingUser.setAge(updatedUser.getAge());
+        existingUser.setPassword(updatedUser.getPassword());
+
+        List<Role> roles = new ArrayList<>();
+        for (Role role : updatedUser.getRoles()) {
+            Role existingRole = roleRepository.findById(role.getId()).orElseThrow(() -> new RuntimeException("Role not found"));
+            roles.add(existingRole);
+        }
+        existingUser.setRoles(roles);
+
+        userRepository.save(existingUser);
     }
 
     @Override

@@ -8,27 +8,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <body>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-
-
 <nav class="navbar navbar-dark bg-dark">
-    <span class="text-light">
-    <a href="#" class="navbar-admin">
-        <th:block th:each="user : ${user1}">
-            <a th:text="${user1.getUsername()}">user</a>
-            &nbsp;with roles:&nbsp;
-            <a th:text="${user1.getRoles()}">user</a>
-        </th:block>
-    </a>
+    <span class="navbar-brand">
+    <span class="text-light" id="usernameNav"></span> with roles:&nbsp;
+    <span class="text-light" id="rolesNav"></span>
         </span>
     <a class="text-muted nav-link active nav-link" href="/logout">Logout</a>
 </nav>
@@ -60,18 +43,13 @@
                                 </tr>
                                 <thead>
                                 <tr>
+                                    <th scope="col">Id</th>
                                     <th scope="col">Username</th>
                                     <th scope="col">Age</th>
                                     <th scope="col">Role</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <th:block th:each="user : ${user1}">
-                                    <tr>
-                                        <td><a th:text="${user1.getUsername()}">us</a></td>
-                                        <td><a th:text="${user1.getAge()}">us</a></td>
-                                        <td><a th:text="${user1.getRoles()}">us</a></td>
-                                </th:block>
+                                <tbody id = "tbodyUser">
                                 </tbody>
                             </table>
                         </div>
@@ -81,5 +59,15 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="/user.js"></script>
 </body>
 </html>

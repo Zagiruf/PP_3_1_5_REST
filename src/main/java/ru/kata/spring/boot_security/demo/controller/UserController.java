@@ -1,9 +1,8 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
@@ -11,11 +10,12 @@ import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
-@Controller
-@RequestMapping(value = "/")
+@RestController
+@RequestMapping(value = "/api")
 public class UserController {
     private final UserService userService;
     private final RoleService roleService;
@@ -26,69 +26,40 @@ public class UserController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/admin")
-    public String showAllUsers(Model model, @ModelAttribute("user") User user, Principal principal) {
-        User userPrincipal = userService.findByUsername(principal.getName());
-        model.addAttribute("user1", userPrincipal);
-        List<User> allUsers = userService.gelAllUsers();
-        model.addAttribute("users", allUsers);
-        model.addAttribute("allRoles", roleService.findRoles());
-        return "admin";
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> printUsers() {
+        List<User> userList = userService.gelAllUsers();
+        return ResponseEntity.ok(userList);
     }
 
-//    @GetMapping("/admin/{id}")
-//    public String show(@PathVariable("id") Long id, Model model) {
-//        model.addAttribute("user", userService.show(id));
-//        return "admin";
-//    }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        User user = userService.show(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
-//    @GetMapping("admin/new")
-//    public ModelAndView newUser(@ModelAttribute("user") User user) {
-//        ModelAndView mav = new ModelAndView("new");
-//        mav.addObject("allRoles", roleService.findRoles());
-//        return mav;
-//    }
-
-    @PostMapping("/admin")
-    public String addNewUser(@ModelAttribute("user") User user, @RequestParam("roles") List<Long> roleId, @RequestParam("password") String password) {
-        user.setRoles(roleService.findRolesById(roleId));
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String result = encoder.encode(password);
-        user.setPassword(result);
+    @PostMapping("/user")
+    public ResponseEntity<HttpStatus> create(@RequestBody User user) {
         userService.saveUser(user);
-        return "redirect:/admin";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
-//    @GetMapping("/admin/{id}/edit")
-//    public ModelAndView editUser(@PathVariable("id") Long id) {
-//        ModelAndView mav = new ModelAndView("edit");
-//        mav.addObject("user", userService.show(id));
-//        mav.addObject("allRoles", roleService.findRoles());
-//        return mav;
-//    }
-
-
-    @PatchMapping("/admin")
-    public String update(@ModelAttribute("user") User user, @RequestParam("roles") List<Long> roleIds, @RequestParam("password") String password) {
-        user.setRoles(roleService.findRolesById(roleIds));
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String result = encoder.encode(password);
-        user.setPassword(result);
-        userService.updateUser(user);
-        return "redirect:/admin";
+    @PutMapping("/user/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody @Valid User user) {
+        userService.updateUser(id, user);
+        return ResponseEntity.ok(user);
     }
 
-    @DeleteMapping("/admin")
-    public String delete(@RequestParam("id") Long id) {
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
-        return "redirect:/admin";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping("/user")
-    public String pageForAuthenticatedUsers(Principal principal, Model model) {
-        User user = userService.findByUsername(principal.getName());
-        model.addAttribute("user1", user);
-        return "user";
 
+    @GetMapping("/userPrincipal")
+    public ResponseEntity<User> pageForAuthenticatedUsers(Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        return ResponseEntity.ok(user);
     }
 }
