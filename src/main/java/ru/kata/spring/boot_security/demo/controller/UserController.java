@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
@@ -40,12 +41,18 @@ public class UserController {
 
     @PostMapping("/user")
     public ResponseEntity<HttpStatus> create(@RequestBody User user) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String result = encoder.encode(user.getPassword());
+        user.setPassword(result);
         userService.saveUser(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PutMapping("/user/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody @Valid User user) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String result = encoder.encode(user.getPassword());
+        user.setPassword(result);
         userService.updateUser(id, user);
         return ResponseEntity.ok(user);
     }

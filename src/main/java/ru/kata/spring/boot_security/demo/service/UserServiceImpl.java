@@ -43,12 +43,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         List<Role> roles = new ArrayList<>();
         for (Role role : user.getRoles()) {
             Role existingRole = roleRepository.findByName(role.getName());
-            if (existingRole != null) {
                 roles.add(existingRole);
-            } else {
-                roles.add(role);
             }
-        }
         user.setRoles(roles);
         userRepository.save(user);
     }
@@ -56,7 +52,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     @Transactional
     public void updateUser(Long id, User updatedUser) {
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User existingUser = userRepository.getById(id);
 
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setAge(updatedUser.getAge());
@@ -64,7 +60,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         List<Role> roles = new ArrayList<>();
         for (Role role : updatedUser.getRoles()) {
-            Role existingRole = roleRepository.findById(role.getId()).orElseThrow(() -> new RuntimeException("Role not found"));
+            Role existingRole = roleRepository.getById(role.getId());
             roles.add(existingRole);
         }
         existingUser.setRoles(roles);

@@ -12,7 +12,7 @@ function navbar() {
             $('#navbar-role').text(roles)
 
         })
-}
+};
 
 
 getTableUser();
@@ -45,7 +45,7 @@ function getTableUser() {
                 tbody.append(users);
             });
         })
-}
+};
 
 
 async function getOneUser(id) {
@@ -191,9 +191,9 @@ function createNewUser() {
             getTableUser();
         });
     });
-}
+};
 
-getPrincipalUser()
+getPrincipalUser();
 
 function getPrincipalUser() {
     tbodyPrincipal.empty();
@@ -212,5 +212,5 @@ function getPrincipalUser() {
             tbodyPrincipal.append(users);
         });
 
-}
+};
 
