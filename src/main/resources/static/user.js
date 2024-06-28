@@ -1,8 +1,9 @@
 const tbodyP = $('#tbodyUser');
+const UrlPrincipal = 'http://localhost:8080/api/userPrincipal'
 navbar();
 
 function navbar() {
-    fetch("/api/userPrincipal")
+    fetch(UrlPrincipal)
         .then(res => res.json())
         .then(user => {
             const roles = user.roles.map(role => role.name).join(',')
@@ -16,7 +17,7 @@ getUser()
 
 function getUser() {
     tbodyP.empty();
-    fetch("api/userPrincipal")
+    fetch(UrlPrincipal)
         .then(res => res.json())
         .then(userP => {
             const roles = userP.roles.map(role => role.name).join(', ');

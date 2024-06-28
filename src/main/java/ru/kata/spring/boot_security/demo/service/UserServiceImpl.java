@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.configs.PasswordBc;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
@@ -18,11 +19,13 @@ import java.util.List;
 public class UserServiceImpl implements UserDetailsService, UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private PasswordBc passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordBc passwordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -40,11 +43,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     @Transactional
     public void saveUser(User user) {
+        user.setPassword(passwordEncoder.passwordEncoder().encode(user.getPassword()));
         List<Role> roles = new ArrayList<>();
         for (Role role : user.getRoles()) {
             Role existingRole = roleRepository.findByName(role.getName());
-                roles.add(existingRole);
-            }
+            roles.add(existingRole);
+        }
         user.setRoles(roles);
         userRepository.save(user);
     }
@@ -53,11 +57,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     public void updateUser(Long id, User updatedUser) {
         User existingUser = userRepository.getById(id);
-
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setAge(updatedUser.getAge());
-        existingUser.setPassword(updatedUser.getPassword());
-
+        existingUser.setPassword(passwordEncoder.passwordEncoder().encode(updatedUser.getPassword()));
         List<Role> roles = new ArrayList<>();
         for (Role role : updatedUser.getRoles()) {
             Role existingRole = roleRepository.getById(role.getId());

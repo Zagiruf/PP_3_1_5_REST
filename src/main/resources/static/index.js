@@ -1,10 +1,12 @@
 const URL = 'http://localhost:8080/api/users';
+const UrlOne = 'http://localhost:8080/api/user/'
+const UrlPrincipal = 'http://localhost:8080/api/userPrincipal'
 const tbody = $('#AllUsers');
 const tbodyPrincipal = $('#userPrincipal');
 navbar();
 
 function navbar() {
-    fetch('/api/userPrincipal')
+    fetch(UrlPrincipal)
         .then(res => res.json())
         .then(user => {
             const roles = user.roles.map(role => role.name).join(',')
@@ -49,7 +51,7 @@ function getTableUser() {
 
 
 async function getOneUser(id) {
-    let response = await fetch("/api/user/" + id);
+    let response = await fetch(UrlOne + id);
     return await response.json();
 }
 
@@ -101,7 +103,7 @@ function editUser() {
         };
 
 
-        fetch('api/user/' + formEdit.id.value, {
+        fetch(UrlOne + formEdit.id.value, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -130,7 +132,7 @@ async function deleteModal(id) {
 function deleteUser() {
     deleteForm.addEventListener("submit", ev => {
         ev.preventDefault();
-        fetch("api/user/" + deleteForm.id.value, {
+        fetch(UrlOne + deleteForm.id.value, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -174,7 +176,7 @@ function createNewUser() {
                 name: "ROLE_" + form.roles.options[i].text
             });
         }
-        fetch("api/user", {
+        fetch(UrlOne, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -197,7 +199,7 @@ getPrincipalUser();
 
 function getPrincipalUser() {
     tbodyPrincipal.empty();
-    fetch('/api/userPrincipal')
+    fetch(UrlPrincipal)
         .then(res => res.json())
         .then(userPrincipal => {
             const roles = userPrincipal.roles.map(role => role.name).join(', ');
